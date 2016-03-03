@@ -1,0 +1,23 @@
+#include <NewPing.h>
+
+const int echoPin = 3;
+const int triggerPin = 6;
+const int maxDistance = 100;
+
+NewPing sonar(triggerPin, echoPin, maxDistance);
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  unsigned int time = sonar.ping();
+  float distance = sonar.convert_cm(time);
+
+  Serial.println(distance);
+  if (distance != 0) {
+    //peis på 
+  }
+  delay(50);
+  
+}
