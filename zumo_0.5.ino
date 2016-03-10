@@ -9,6 +9,7 @@ Drive forward and turn left or right when border is detected
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
 #include <NewPing.h>
+
  
  
 // this might need to be tuned for different lighting conditions, surfaces, etc.
@@ -16,8 +17,8 @@ Drive forward and turn left or right when border is detected
   
 // these might need to be tuned for different motor types
 #define reverse_speed     200 // 0 is stopped, 400 is full speed
-#define turn_speed        200
-#define full_speed        200
+#define turn_speed        250
+#define full_speed        400
 #define reverse_duration  200 // ms
 #define turn_duration     300 // ms
  
@@ -25,7 +26,9 @@ Drive forward and turn left or right when border is detected
 // setting up Sonarsensor
 const int echoPin = 3;
 const int triggerPin = 6;
-const int maxDistance = 100;    // max necessary distance
+const int maxDistance = 70;    // max necessary distance
+
+
 
 NewPing robotSonar(triggerPin, echoPin, maxDistance);
 
@@ -51,13 +54,13 @@ void setup()
    
 
   Serial.begin(9600);
+
 }
 
 void startMove(){
-  spinInRandomDirection();
-  delay(300);                   //not sure about delay time here
+  spinInRandomDirection(randomSide());                   //not sure about delay time here
   driveBack(full_speed);
-  delay(reverse_duration);
+  delay(reverse_duration/2);
 }
 
 void loop()
@@ -83,11 +86,12 @@ void loop()
 
 
 void searchAndCharge(){
-  if (detectedEnemy(5))
+  if (detectedEnemy(40))
   {
     driveForward(full_speed);
   }else{
-    spinInRandomDirection();
+    spinWhileSearching();
+    //spinInRandomDirection(randomSide());
   }
 }
 
@@ -107,13 +111,10 @@ void turnRight(int speed){
   motors.setSpeeds(speed,-speed);
 }
 
-bool detectedEnemy(float maxSearchDistance){
+bool detectedEnemy(int maxDetectDistance){
   unsigned int time = robotSonar.ping();
   float sonarDistance = robotSonar.convert_cm(time);
-  Serial.print(sonarDistance);
-  delay(1000);
-  if (sonarDistance <= maxSearchDistance && sonarDistance > 0.1) {
-    
+  if (sonarDistance != 0 && sonarDistance < maxDetectDistance) {
     return true;
   }else{
     return false;
@@ -121,18 +122,38 @@ bool detectedEnemy(float maxSearchDistance){
 
 }
 
+bool seekDirection = true;
+int seekSteps = 0;
 
-void spinInRandomDirection(){
+void spinWhileSearching(){
+  if (seekDirection){ 
+    turnRight(turn_speed);
+  }else{
+    turnLeft(turn_speed);
+  }
+
+  
+  if(seekSteps == 0){
+    seekDirection = !seekDirection;
+    seekSteps = random(70, 150);
+  }
+
+  seekSteps--;
+  /* search for enemy */
+
+}
+
+
+void spinInRandomDirection(int randSide){
   int right = 1;
-  int left = 2;
-  if (randomSide() == right){                   //randomSide is right, turning to righ 
+  if (randSide == right){                   //randomSide is right, turning to righ 
     turnRight(turn_speed);
   }else{                                      //then randomSide is left
     turnLeft(turn_speed);
   }
 }
 
-int randomSide (){
-  return (rand()%(1))+1;
+int randomSide(){
+  return random(1, 3);
 }
   
