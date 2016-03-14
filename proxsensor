@@ -1,23 +1,26 @@
 #include <NewPing.h>
 
-const int echoPin = 3;
-const int triggerPin = 6;
+const int echoPin1 = 2;
+const int triggerPin1 = 3;
+const int triggerPin2 = 6;
+const int echoPin2 = A1;
 const int maxDistance = 100;
 
-NewPing sonar(triggerPin, echoPin, maxDistance);
+NewPing sonar1(triggerPin1, echoPin1, maxDistance);
+NewPing sonar2(triggerPin2, echoPin2, maxDistance);
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  unsigned int time = sonar.ping();
-  float distance = sonar.convert_cm(time);
-
-  Serial.println(distance);
-  if (distance != 0) {
-    //peis på 
-  }
-  delay(50);
-  
+  unsigned int time1 = sonar1.ping();
+  unsigned int time2 = sonar2.ping();
+  float distance1 = sonar1.convert_cm(time1);
+  float distance2 = sonar2.convert_cm(time2);
+  Serial.println(distance1);
+  Serial.println(distance2);
+  Serial.print("\n");
+   
+  delay(100);
 }
