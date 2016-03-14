@@ -24,13 +24,17 @@ Drive forward and turn left or right when border is detected
  
 
 // setting up Sonarsensor
-const int echoPin = 3;
-const int triggerPin = 6;
+const int echoPinFront = 2;
+const int triggerPinFront = 3;
+const int echoPinBack = A1;
+const int triggerPinBack = 6;
+
 const int maxDistance = 70;    // max necessary distance
 
 
 
-NewPing robotSonar(triggerPin, echoPin, maxDistance);
+NewPing sonarFront(triggerPinFront, echoPinFront, maxDistance);
+NewPing sonarBack(triggerPinBack,echoPinBack,maxDistance);
 
 
 // setting up motors
@@ -47,10 +51,10 @@ ZumoReflectanceSensorArray robotSensors;   // ''
  
 void setup()
 {
-   robotSensors.init();
-   button.waitForButton();
+  robotSensors.init();
+  button.waitForButton();
 
-   startMove();
+  startMove();
    
 
   Serial.begin(9600);
@@ -58,9 +62,10 @@ void setup()
 }
 
 void startMove(){
-  spinInRandomDirection(randomSide());                   //not sure about delay time here
+  motors.setSpeeds(-400,400);
+  delay(175);                   //not sure about delay time here
   driveBack(full_speed);
-  delay(reverse_duration/2);
+  delay(300);
 }
 
 void loop()
@@ -86,13 +91,19 @@ void loop()
 
 
 void searchAndCharge(){
-  if (detectedEnemy(40))
-  {
+  if (detectedEnemyFront(40)){
     driveForward(full_speed);
+  }else if(detectedEnemyBack(40)){
+    fastBackTurn(400);
   }else{
     spinWhileSearching();
     //spinInRandomDirection(randomSide());
   }
+}
+
+void fastBackTurn(int speed){
+  motors.setSpeeds(speed, -speed);
+  delay(350);
 }
 
 void driveBack(int speed){
@@ -111,15 +122,25 @@ void turnRight(int speed){
   motors.setSpeeds(speed,-speed);
 }
 
-bool detectedEnemy(int maxDetectDistance){
-  unsigned int time = robotSonar.ping();
-  float sonarDistance = robotSonar.convert_cm(time);
-  if (sonarDistance != 0 && sonarDistance < maxDetectDistance) {
+bool detectedEnemyFront(int maxDetectDistance){
+  unsigned int timeFront = sonarFront.ping();
+  float sonarDistanceFront = sonarFront.convert_cm(timeFront);
+  Serial.println(sonarDistanceFront);
+  if (sonarDistanceFront != 0 && sonarDistanceFront < maxDetectDistance) {
     return true;
   }else{
     return false;
   }
+}
 
+bool detectedEnemyBack(int maxDetectDistance){
+  unsigned int timeBack = sonarBack.ping();
+  float sonarDistanceBack = sonarBack.convert_cm(timeBack);
+  if (sonarDistanceBack != 0 && sonarDistanceBack < maxDetectDistance) {
+    return true;
+  }else{
+    return false;
+  }
 }
 
 bool seekDirection = true;
@@ -140,20 +161,4 @@ void spinWhileSearching(){
 
   seekSteps--;
   /* search for enemy */
-
 }
-
-
-void spinInRandomDirection(int randSide){
-  int right = 1;
-  if (randSide == right){                   //randomSide is right, turning to righ 
-    turnRight(turn_speed);
-  }else{                                      //then randomSide is left
-    turnLeft(turn_speed);
-  }
-}
-
-int randomSide(){
-  return random(1, 3);
-}
-  
