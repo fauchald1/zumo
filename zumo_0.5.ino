@@ -80,8 +80,7 @@ void loop()
     // if leftmost sensor detects line, reverse and turn to the right
     driveBack(reverse_speed);
     delay(reverse_duration);
-    searchAndCharge();
-    //motors.setSpeeds(full_speed, full_speed);
+    searchAndCharge(); 
   }else{
     // otherwise, go search for tager
     searchAndCharge();
