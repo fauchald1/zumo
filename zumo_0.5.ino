@@ -54,7 +54,8 @@ void loop(){
 
 void startMove(){
   turnLeft(full_speed);
-  delay(175); // not sure about delay time here
+  delay(175);
+
   driveBack(full_speed);
   delay(300);
 }
