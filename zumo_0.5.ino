@@ -29,9 +29,6 @@ Pushbutton button(ZUMO_BUTTON); // pushbutton on pin 12
 ZumoReflectanceSensorArray robotSensors;
 unsigned int sensor_values[6];
 
-// 
-LSM303 
-
 void setup(){
   robotSensors.init();
   button.waitForButton();
