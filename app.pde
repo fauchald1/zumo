@@ -23,22 +23,22 @@ void btWrite(String string) {
 ////////////////////////
 // SETTING UP BUTTONS //
 ////////////////////////
-int[] upButtonFrame = {150,40,100,50};
-String upButtonString = "^";
+int[] upButtonFrame = {150,60,100,50};
+String upButtonString = "↑";
 
-int[] downButtonFrame = {150,160,100,50};
-String downButtonString = "˅";
+int[] downButtonFrame = {150,180,100,50};
+String downButtonString = "↓";
 
-int[] leftButtonFrame = {80,100,100,50};
-String leftButtonString = "<";
+int[] leftButtonFrame = {80,120,100,50};
+String leftButtonString = "←";
 
-int[] rightButtonFrame = {215,100,100,50};
-String rightButtonString = ">";
+int[] rightButtonFrame = {215,120,100,50};
+String rightButtonString = "→";
 
 ///////////////////////
 // SETTING UP OUTPUT //
 ///////////////////////
-int[] outputFrame = {150,10,100,25};
+int[] outputFrame = {150,10,100,30};
 String outputText = "";
 
 
