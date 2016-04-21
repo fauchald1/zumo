@@ -27,13 +27,13 @@ int[] upButtonFrame = {150,40,100,50};
 String upButtonString = "^";
 
 int[] downButtonFrame = {150,160,100,50};
-String downButtonString = "BACK";
+String downButtonString = "˅";
 
 int[] leftButtonFrame = {80,100,100,50};
-String leftButtonString = "<-";
+String leftButtonString = "<";
 
 int[] rightButtonFrame = {215,100,100,50};
-String rightButtonString = "->";
+String rightButtonString = ">";
 
 ///////////////////////
 // SETTING UP OUTPUT //
