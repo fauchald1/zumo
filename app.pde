@@ -19,6 +19,9 @@ void btWrite(String string) {
   }
 }
 
+void btRead(String string) {
+  println("Received: " + string);
+}
 
 ////////////////////////
 // SETTING UP BUTTONS //
@@ -51,17 +54,11 @@ void setup(){
 }
 
 void draw(){
-  
   drawText(outputFrame,outputText);
   drawButton(upButtonFrame,upButtonString);
   drawButton(leftButtonFrame,leftButtonString);
   drawButton(rightButtonFrame,rightButtonString);
   drawButton(downButtonFrame,downButtonString);
-  mousePressed();
-}
-
-void btRead(String string) {
-  println("Received: " + string);
 }
 
 //////////////////////////
@@ -70,6 +67,7 @@ void btRead(String string) {
 void drawButton(int[] xywh, String buttonText) {
     boolean mousePressedInButton = mouseInside(xywh) && mousePressed;
     stroke(201,201,201);
+    
     if (mousePressedInButton) {
       fill(201,201,201); }
     else {
