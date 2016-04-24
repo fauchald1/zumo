@@ -8,6 +8,7 @@ void bindPLabBridge (PLabBridge bridge) {
   bridge.subscribeMessages (new PLabRecv() {
     public void receive (String string) {
       // code on BT receive goes here.
+      println("Incomming: " + string);
     }
   });
   size(bridge.getWidth(), bridge.getHeight());
