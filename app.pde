@@ -20,6 +20,10 @@ void btWrite(String string) {
   }
 }
 
+import processing.serial.*;
+Serial myPort;
+String val;
+
 ////////////////////////
 // SETTING UP BUTTONS //
 ////////////////////////
@@ -44,17 +48,33 @@ String outputText = "";
 
 
 void setup(){
-  size(400,600);
-  background(242, 196, 255);
+  size(400,400);
+  background(137,189,211);
   stroke(0);
+//////////
+// PORT //
+//////////
+  println(Serial.list());
+  String portName = Serial.list()[1];
+  myPort = new Serial(this, portName, 9600);
+
 }
 
+int tempVal = 0;
 void draw(){
-  drawText(outputFrame,outputText);
+  if (myPort.available() > 0) {
+    tempVal = myPort.read();
+    println(tempVal);
+    //val = myPort.read();
+    //val = myPort.readStringUntill(n);
+    drawText(outputFrame,val);
+  }
+  //drawText(outputFrame,val);
   drawButton(upButtonFrame,upButtonString);
   drawButton(leftButtonFrame,leftButtonString);
   drawButton(rightButtonFrame,rightButtonString);
   drawButton(downButtonFrame,downButtonString);
+  mousePressed();
 }
 
 
@@ -63,13 +83,13 @@ void draw(){
 //////////////////////////
 void drawButton(int[] xywh, String buttonText) {
     boolean mousePressedInButton = mouseInside(xywh) && mousePressed;
-    stroke(0);
+    stroke(201,201,201);
     if (mousePressedInButton) {
-      fill(0); }
+      fill(201,201,201); }
     else {
-      fill(255);
+      fill(227,227,227);
     }
-    rect(xywh[0],xywh[1],xywh[2],xywh[3],10);
+    rect(xywh[0],xywh[1],xywh[2],xywh[3],30);
     if (mousePressedInButton) {
       fill(255); }
     else {
@@ -105,12 +125,12 @@ boolean mouseInside(int[] rect) {
 
 void mousePressed(){
   if (mouseInside(upButtonFrame)) {
-    btWrite("FORWARD");
+    myPort.write("F"); //FORWARD
   }else if (mouseInside(downButtonFrame)) {
-    btWrite("BACK");
+    myPort.write("B"); //BACK
   }else if (mouseInside(leftButtonFrame)) {
-    btWrite("LEFT");
+    myPort.write("L"); //LEFT
   }else if (mouseInside(rightButtonFrame)) {
-    btWrite("RIGHT");
+    myPort.write("R"); // RIGHT
   }
 }
