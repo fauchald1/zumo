@@ -3,7 +3,6 @@ private PLabBridge pBridge;
 private String received = null;
 
 void bindPLabBridge (PLabBridge bridge) {
-
   pBridge = bridge;
 
   bridge.subscribeMessages (new PLabRecv() {
@@ -20,9 +19,6 @@ void btWrite(String string) {
   }
 }
 
-import processing.serial.*;
-Serial myPort;
-String val;
 
 ////////////////////////
 // SETTING UP BUTTONS //
@@ -51,25 +47,12 @@ void setup(){
   size(400,400);
   background(137,189,211);
   stroke(0);
-//////////
-// PORT //
-//////////
-  println(Serial.list());
-  String portName = Serial.list()[1];
-  myPort = new Serial(this, portName, 9600);
-
+  setupSerial();
 }
 
-int tempVal = 0;
 void draw(){
-  if (myPort.available() > 0) {
-    tempVal = myPort.read();
-    println(tempVal);
-    //val = myPort.read();
-    //val = myPort.readStringUntill(n);
-    drawText(outputFrame,val);
-  }
-  //drawText(outputFrame,val);
+  
+  drawText(outputFrame,outputText);
   drawButton(upButtonFrame,upButtonString);
   drawButton(leftButtonFrame,leftButtonString);
   drawButton(rightButtonFrame,rightButtonString);
@@ -77,6 +60,9 @@ void draw(){
   mousePressed();
 }
 
+void btRead(String string) {
+  println("Received: " + string);
+}
 
 //////////////////////////
 // DRAWING BUTTON FIELD //
@@ -125,12 +111,12 @@ boolean mouseInside(int[] rect) {
 
 void mousePressed(){
   if (mouseInside(upButtonFrame)) {
-    myPort.write("F"); //FORWARD
+    btWrite("F"); //FORWARD
   }else if (mouseInside(downButtonFrame)) {
-    myPort.write("B"); //BACK
+    btWrite("B"); //BACK
   }else if (mouseInside(leftButtonFrame)) {
-    myPort.write("L"); //LEFT
+    btWrite("L"); //LEFT
   }else if (mouseInside(rightButtonFrame)) {
-    myPort.write("R"); // RIGHT
+    btWrite("R"); // RIGHT
   }
 }
